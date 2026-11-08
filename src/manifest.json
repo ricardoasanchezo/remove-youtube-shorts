@@ -7,7 +7,7 @@
   "host_permissions": ["https://*.youtube.com/*"],
   "content_scripts": [{
     "matches": ["https://*.youtube.com/results*"],
-    "js": ["search-results.js"]
+    "js": ["content.js"]
   }],
   "action": {
     "default_popup": "popup.html",

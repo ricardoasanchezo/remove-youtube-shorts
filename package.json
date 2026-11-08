@@ -1,0 +1,11 @@
+{
+  "name": "remove-youtube-shorts",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build": "tsc && cp src/manifest.json dist/ && cp src/popup/popup.html dist/"
+  }
+}

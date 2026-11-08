@@ -11,8 +11,12 @@
 //     }
 // }
 
-function handleShelves(shelf) {
-    let title = shelf.querySelector('#title').innerText
+function handleShelves(shelf: HTMLElement) {
+    const titleEl = shelf.querySelector('#title')
+    if (!titleEl || !(titleEl instanceof HTMLElement))
+        return
+
+    let title = titleEl.innerText
 
     if (title === 'People also watched')
         shelf.remove()
@@ -26,7 +30,10 @@ function handleShelves(shelf) {
         console.log(`Found title without condition: ${title}`)
 }
 
-function handleNode(node) {
+function handleNode(node: Node) {
+    if (!(node instanceof HTMLElement))
+        return
+
     const tag = node.tagName.toLowerCase()
 
     if (tag === 'ytd-reel-shelf-renderer')  { // Remove Shorts
@@ -36,16 +43,20 @@ function handleNode(node) {
         handleShelves(node)
     }
     else if (node.id.toLowerCase() === 'text' && node.innerText.includes('SHORTS')) { // Remove shorts presented as video results
-        while (node.tagName.toLowerCase() !== 'ytd-video-renderer')
-            node = node.parentNode
-
-        node.remove()
+        let current: HTMLElement = node
+        while (current && current.tagName.toLowerCase() !== 'ytd-video-renderer') {
+            if (!current.parentElement) break
+            current = current.parentElement
+        }
+        if (current && current.tagName.toLowerCase() === 'ytd-video-renderer') {
+            current.remove()
+        }
     }
 }
 
 
 function main(){
-    const callback = (mutations) => {
+    const callback = (mutations: MutationRecord[]) => {
         // removeShortsAsVideos()
 
         for (const mutation of mutations) {
