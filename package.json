@@ -6,6 +6,6 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "build": "tsc && cp src/manifest.json dist/ && cp src/popup/popup.html dist/"
+    "build": "tsc && cp src/manifest.json dist/ && cp src/popup/popup.html dist/ && cp src/styles.css dist/"
   }
 }

@@ -1,0 +1,4 @@
+/* Hide YouTube grid-shelf-view-model elements */
+grid-shelf-view-model {
+    display: none !important;
+}
