@@ -11,9 +11,11 @@
       "https://*.youtube.com/",
       "https://*.youtube.com/feed/subscriptions"
     ],
-    "css": ["styles.css"],
     "js": ["content.js"]
   }],
+  "permissions": [
+    "storage"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Make YouTube Great Again!"
