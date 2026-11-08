@@ -1,4 +1,6 @@
-console.log("Loaded Remove YouTube Shorts")
+import { logger } from './logger'
+
+logger.log("Loaded Remove YouTube Shorts")
 
 let hiddenCount = 0
 
@@ -12,7 +14,7 @@ chrome.storage.local.get(['hiddenCount'], (result: { hiddenCount?: number }) => 
 function incrementCount(amount: number) {
     hiddenCount += amount
     chrome.storage.local.set({ hiddenCount })
-    console.log(`Hidden shorts/shelves total: ${hiddenCount}`)
+    logger.log(`Hidden shorts/shelves total: ${hiddenCount}`)
 }
 
 function processNode(node: Element) {
