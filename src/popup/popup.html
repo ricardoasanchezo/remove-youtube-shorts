@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Remove Youtube Shorts</title>
+    <title>Remove YouTube Shorts</title>
     <style>
         :root {
             --primary: #ff0000;
@@ -22,7 +22,7 @@
         .header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
             margin-bottom: 16px;
         }
         h1 {
@@ -37,9 +37,9 @@
             padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
-        .stat-row {
+        .stat-row, .toggle-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,15 +53,25 @@
             font-weight: 600;
             color: var(--primary);
         }
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Remove Youtube Shorts</h1>
+        <h1>Remove YouTube Shorts</h1>
     </div>
     <div class="card">
+        <div class="toggle-row">
+            <label class="label" for="active-toggle">Enabled</label>
+            <input type="checkbox" id="active-toggle" checked>
+        </div>
         <div class="stat-row">
-            <span class="label">Shorts Sections Removed</span>
+            <span class="label">Shorts Removed</span>
             <span id="counter" class="value">0</span>
         </div>
     </div>

@@ -3,21 +3,36 @@ import { logger } from './logger'
 logger.log("Loaded Remove YouTube Shorts")
 
 let hiddenCount = 0
+let isEnabled = true
 
-// Initialize count from storage
-chrome.storage.local.get(['hiddenCount'], (result: { hiddenCount?: number }) => {
+// Check enabled state on startup
+chrome.storage.local.get(['hiddenCount', 'enabled'], (result: { hiddenCount?: number; enabled?: boolean }) => {
     if (typeof result.hiddenCount === 'number') {
         hiddenCount = result.hiddenCount
+    }
+    if (result.enabled === false) {
+        isEnabled = false
+        logger.log("Extension is currently disabled.")
+    }
+})
+
+// Listen for toggle changes
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.enabled) {
+        isEnabled = Boolean(changes.enabled.newValue)
+        logger.log("Extension enabled state changed to:", isEnabled)
     }
 })
 
 function incrementCount(amount: number) {
+    if (!isEnabled) return
     hiddenCount += amount
     chrome.storage.local.set({ hiddenCount })
     logger.log(`Hidden shorts/shelves total: ${hiddenCount}`)
 }
 
 function processNode(node: Element) {
+    if (!isEnabled) return
     const tag = node.tagName.toLowerCase()
 
     if (tag === 'grid-shelf-view-model' || tag === 'ytd-rich-shelf-renderer' || tag === 'ytd-reel-shelf-renderer') {
@@ -28,6 +43,7 @@ function processNode(node: Element) {
 
 // Recursive helper to pierce Shadow DOMs if elements are encapsulated
 function searchTree(root: ParentNode | ShadowRoot) {
+    if (!isEnabled) return
     const selector = 'grid-shelf-view-model, ytd-rich-shelf-renderer, ytd-reel-shelf-renderer'
     root.querySelectorAll(selector).forEach(el => {
         el.remove()
@@ -42,13 +58,15 @@ function searchTree(root: ParentNode | ShadowRoot) {
     })
 }
 
-// 1. Polling interval to catch initial load & SPA page changes reliably
+// Polling interval to catch initial load & SPA page changes reliably
 setInterval(() => {
+    if (!isEnabled) return
     searchTree(document)
 }, 300)
 
-// 2. MutationObserver for dynamic additions (infinite scroll)
+// MutationObserver for dynamic additions (infinite scroll)
 const observer = new MutationObserver((mutations) => {
+    if (!isEnabled) return
     for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
             if (node.nodeType === Node.ELEMENT_NODE) {
